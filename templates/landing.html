@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-shell position-relative overflow-hidden">
+
+
+
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+
+  <div class="hero-panel text-center">
+    <span class="hero-badge">Productivity • Focus • Flow</span>
+    <h1 class="hero-title">FlowBoard</h1>
+    <p class="hero-subtitle">
+      A simple productivity workspace for planning tasks, tracking progress, and staying focused.
+    </p>
+
+    <p class="hero-copy mx-auto">
+      Organize your work with a clean Kanban board, archive completed tasks, and stay productive with a built-in Pomodoro timer designed to help you stay in flow.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+      <a href="{{ url_for('register') }}" class="btn btn-dark btn-lg px-4">Get Started</a>
+      <a href="{{ url_for('login') }}" class="btn btn-outline-dark btn-lg px-4">Login</a>
+    </div>
+  </div>
+</section>
+
+<section class="row g-4 mt-4">
+  <div class="col-md-4">
+    <div class="feature-card premium-card">
+      <div class="feature-icon">📋</div>
+      <h4>Organize Tasks</h4>
+      <p class="text-muted mb-0">
+        Manage tasks across To Do, Doing, and Done with a clean Kanban workflow.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="feature-card premium-card">
+      <div class="feature-icon">⏳</div>
+      <h4>Stay Focused</h4>
+      <p class="text-muted mb-0">
+        Use the Pomodoro timer to work in focused intervals and avoid burnout.
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="feature-card premium-card">
+      <div class="feature-icon">🗂</div>
+      <h4>Track Progress</h4>
+      <p class="text-muted mb-0">
+        Archive completed work and keep a history of what you’ve accomplished.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

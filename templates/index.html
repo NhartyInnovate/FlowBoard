@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+ <div class="dashboard-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+  <div>
+    <h1 class="mb-1">Welcome, {{ current_user.name }}</h1>
+    <p class="text-muted mb-0">Here’s your board for today.</p>
+  </div>
+
+  <div class="d-flex gap-2 flex-wrap">
+    <button class="btn btn-outline-dark btn-lg" onclick="togglePomodoro()">⏳ Focus Timer</button>
+    <a href="{{ url_for('add_task') }}" class="btn btn-dark btn-lg">+ New Task</a>
+  </div>
+</div>
+
+<div id="pomodoro-wrapper" class="pomodoro-wrapper hidden mb-4">
+  <div class="pomodoro-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">⏳ Pomodoro Timer</h4>
+      <button class="btn btn-sm btn-outline-secondary" onclick="togglePomodoro()">Close</button>
+    </div>
+
+    <div id="timer-display" class="timer-display">25:00</div>
+
+    <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
+      <button class="btn btn-dark btn-sm" onclick="startTimer()">Start</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="pauseTimer()">Pause</button>
+      <button class="btn btn-outline-danger btn-sm" onclick="resetTimer()">Reset</button>
+    </div>
+
+    <p class="text-muted small mt-3 mb-0 text-center">
+      25 minutes focus, then take a short break.
+    </p>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4 col-12">
+    <div class="board-column todo-column">
+      <h4 class="column-title">To Do</h4>
+      {% for task in todo_tasks %}
+        <div class="task-card">
+          <h5>{{ task.title }}</h5>
+          <p class="small text-muted">{{ task.description }}</p>
+          <p class="mb-1"><strong>Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
+          <p class="mb-2"><strong>Due:</strong> {{ task.due_date or 'N/A' }}</p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('move_task', task_id=task.id, new_status='Doing') }}" class="btn btn-sm btn-primary">Move to Doing</a>
+            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-dark">Edit</a>
+            <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Delete this task?');">Delete</a>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">No tasks here.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-4 col-12">
+    <div class="board-column doing-column">
+      <h4 class="column-title">Doing</h4>
+      {% for task in doing_tasks %}
+        <div class="task-card">
+          <h5>{{ task.title }}</h5>
+          <p class="small text-muted">{{ task.description }}</p>
+          <p class="mb-1"><strong>Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
+          <p class="mb-2"><strong>Due:</strong> {{ task.due_date or 'N/A' }}</p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('move_task', task_id=task.id, new_status='Done') }}" class="btn btn-sm btn-success">Move to Done</a>
+            <a href="{{ url_for('move_task', task_id=task.id, new_status='To Do') }}" class="btn btn-sm btn-secondary">Back</a>
+            <a href="{{ url_for('edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-dark">Edit</a>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">No tasks here.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-4 col-12">
+    <div class="board-column done-column">
+      <h4 class="column-title">Done</h4>
+      {% for task in done_tasks %}
+        <div class="task-card">
+          <h5>{{ task.title }}</h5>
+          <p class="small text-muted">{{ task.description }}</p>
+          <p class="mb-1"><strong>Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
+          <p class="mb-2"><strong>Due:</strong> {{ task.due_date or 'N/A' }}</p>
+
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('move_task', task_id=task.id, new_status='Doing') }}" class="btn btn-sm btn-secondary">Back to Doing</a>
+            <a href="{{ url_for('archive_task', task_id=task.id) }}" class="btn btn-sm btn-outline-primary">Archive</a>
+            <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Delete this task?');">Delete</a>
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">No tasks here.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+let timer;
+let timeLeft = 25 * 60;
+let isRunning = false;
+
+function updateDisplay() {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById("timer-display").textContent =
+    `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function startTimer() {
+  if (isRunning) return;
+  isRunning = true;
+  timer = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateDisplay();
+    } else {
+      clearInterval(timer);
+      isRunning = false;
+      alert("Pomodoro complete! Take a short break.");
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timer);
+  isRunning = false;
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  isRunning = false;
+  timeLeft = 25 * 60;
+  updateDisplay();
+}
+
+function togglePomodoro() {
+  const wrapper = document.getElementById("pomodoro-wrapper");
+  wrapper.classList.toggle("hidden");
+}
+
+updateDisplay();
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+  <h1 class="mb-1">Archived Tasks</h1>
+  <p class="text-muted mb-0">Review completed tasks you’ve archived.</p>
+</div>
+
+<div class="row g-4">
+  {% for task in archived_tasks %}
+    <div class="col-md-6 col-lg-4">
+      <div class="task-card">
+        <h5>{{ task.title }}</h5>
+        <p class="small text-muted">{{ task.description }}</p>
+        <p class="mb-1"><strong>Priority:</strong> <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span></p>
+        <p class="mb-2"><strong>Due:</strong> {{ task.due_date or 'N/A' }}</p>
+        <p class="mb-3"><strong>Status:</strong> Archived</p>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{{ url_for('restore_task', task_id=task.id) }}" class="btn btn-sm btn-outline-success">Restore</a>
+          <a href="{{ url_for('delete_task', task_id=task.id) }}" class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Delete this archived task?');">Delete</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="col-12">
+      <div class="alert alert-light border">
+        No archived tasks yet.
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
