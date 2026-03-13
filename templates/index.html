@@ -13,24 +13,28 @@
   </div>
 </div>
 
-<div id="pomodoro-wrapper" class="pomodoro-wrapper hidden mb-4">
-  <div class="pomodoro-card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="mb-0">⏳ Pomodoro Timer</h4>
-      <button class="btn btn-sm btn-outline-secondary" onclick="togglePomodoro()">Close</button>
+<div class="row justify-content-center mb-4">
+  <div class="col-lg-5 col-md-8 col-12">
+    <div id="pomodoro-wrapper" class="pomodoro-wrapper hidden">
+      <div class="pomodoro-card mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">⏳ Pomodoro Timer</h4>
+          <button class="btn btn-sm btn-outline-secondary" onclick="togglePomodoro()">Close</button>
+        </div>
+
+        <div id="timer-display" class="timer-display">25:00</div>
+
+        <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
+          <button class="btn btn-dark btn-sm" onclick="startTimer()">Start</button>
+          <button class="btn btn-outline-secondary btn-sm" onclick="pauseTimer()">Pause</button>
+          <button class="btn btn-outline-danger btn-sm" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <p class="text-muted small mt-3 mb-0 text-center">
+          25 minutes focus, then take a short break.
+        </p>
+      </div>
     </div>
-
-    <div id="timer-display" class="timer-display">25:00</div>
-
-    <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
-      <button class="btn btn-dark btn-sm" onclick="startTimer()">Start</button>
-      <button class="btn btn-outline-secondary btn-sm" onclick="pauseTimer()">Pause</button>
-      <button class="btn btn-outline-danger btn-sm" onclick="resetTimer()">Reset</button>
-    </div>
-
-    <p class="text-muted small mt-3 mb-0 text-center">
-      25 minutes focus, then take a short break.
-    </p>
   </div>
 </div>
 

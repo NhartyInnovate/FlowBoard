@@ -3,12 +3,17 @@ from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+from sqlalchemy import func
+
+
 
 app = Flask(__name__)
 app.secret_key = "super-secret-key"
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(BASE_DIR, "tasks.db")
+ADMIN_EMAIL = "nkatugwa@gmail.com"
+DATABASE_DIR = os.environ.get("DATABASE_DIR", os.path.abspath(os.path.dirname(__file__)))
+db_path = os.path.join(DATABASE_DIR, "tasks.db")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -46,6 +51,9 @@ class Task(db.Model):
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
+def is_admin():
+    return current_user.is_authenticated and current_user.email == ADMIN_EMAIL
+
 
 # ---------------- PUBLIC ROUTES ----------------
 @app.route("/")
@@ -54,6 +62,27 @@ def landing():
         return redirect(url_for("dashboard"))
     return render_template("landing.html")
 
+@app.route("/admin")
+@login_required
+def admin_dashboard():
+    if not is_admin():
+        flash("You are not authorized to view the admin dashboard.")
+        return redirect(url_for("dashboard"))
+
+    total_users = User.query.count()
+    total_tasks = Task.query.count()
+    completed_tasks = Task.query.filter_by(status="Done").count()
+
+    # active users = users who have created at least one task
+    active_users = db.session.query(func.count(func.distinct(Task.user_id))).scalar() or 0
+
+    return render_template(
+        "admin_dashboard.html",
+        total_users=total_users,
+        active_users=active_users,
+        total_tasks=total_tasks,
+        completed_tasks=completed_tasks,
+    )
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -106,7 +135,9 @@ def login():
 
     return render_template("login.html")
 
-
+@app.context_processor
+def inject_year():
+    return {"current_year": datetime.now().year }
 @app.route("/logout")
 @login_required
 def logout():

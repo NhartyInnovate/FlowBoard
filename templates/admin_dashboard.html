@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+  <h1 class="mb-1">Admin Dashboard</h1>
+  <p class="text-muted mb-0">Overview of FlowBoard usage.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card">
+      <h5>Total Users</h5>
+      <div class="stats-number">{{ total_users }}</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card">
+      <h5>Active Users</h5>
+      <div class="stats-number">{{ active_users }}</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card">
+      <h5>Total Tasks</h5>
+      <div class="stats-number">{{ total_tasks }}</div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="stats-card">
+      <h5>Completed Tasks</h5>
+      <div class="stats-number">{{ completed_tasks }}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

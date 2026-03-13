@@ -214,6 +214,7 @@ body::after {
   box-shadow: 0 10px 30px rgba(15,23,42,0.08);
   border: 1px solid rgba(255,255,255,0.6);
   max-width: 520px;
+  margin: 0 auto;
 }
 
 .timer-display {
@@ -709,4 +710,40 @@ main {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.footer {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(0,0,0,0.05);
+  padding: 18px 0;
+  font-size: 0.9rem;
+}
+
+.footer strong {
+  color: #111827;
+}
+
+.footer .text-muted {
+  color: #6b7280 !important;
+}
+
+.stats-card {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  text-align: center;
+}
+
+.stats-card h5 {
+  margin-bottom: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.stats-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #111827;
 }
