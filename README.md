@@ -8,7 +8,7 @@ This project was built as part of the **100 Days of Python Bootcamp** to practic
 
 ## Live Demo
 
-[https://nharthanyel.pythonanywhere.com/]
+[🚀 View Live App][https://nharthanyel.pythonanywhere.com/]
 
 ---
 
